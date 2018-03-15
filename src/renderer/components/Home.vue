@@ -1,29 +1,31 @@
 <template>
   <div>
     <div class="search-input">
-      <el-input prefix-icon="el-icon-search" @change="filterProjects(input)" v-model="input" placeholder="请输入项目名称,按下Enter筛选"></el-input>
+      <el-input prefix-icon="el-icon-search" @input="filterProjects(input)" v-model="input" placeholder="请输入项目名称,按下Enter筛选"></el-input>
     </div>
     <ul class="project-list">
-      <li v-for="project in projects" :key="project.id">
-        <i class="el-icon-document project-icon"></i>
+      <li is="router-link" :to="`/projects/${project.id}`" v-for="project in projects" :key="project.id">
+        <span class="project-icon">
+          <i class="el-icon-document"></i>
+        </span>
         <span class="project-title">{{project.title}}</span>
       </li>
-      <li>
-        <i class="el-icon-plus project-icon"></i>
+      <li class="project-add">
+        <i class="el-icon-plus"></i>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-  import { mapState, mapActions } from "vuex";
+  import { mapGetters, mapActions } from "vuex";
   export default {
     data() {
       return {
         input: ""
       };
     },
-    computed: { ...mapState(["projects"]) },
+    computed: { ...mapGetters(["projects"]) },
     created() {
       this.$store.dispatch("initProjects");
     },
@@ -51,18 +53,27 @@
   text-align: center;
   width: 120px;
   height: 120px;
+  cursor: pointer;
+}
+li.project-add {
+  line-height: 120px;
+  font-size: 84px;
+  color: #dfdfdf;
 }
 .project-title {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   display: inline-block;
+  font-size: 16px;
+  height: 24px;
+  line-height: 24px;
 }
 .project-icon {
+  display: inline-block;
   font-size: 72px;
   color: #d1ba74;
-}
-.project-icon.el-icon-plus {
-  color: #dfdfdf;
+  height: 96px;
+  line-height: 96px;
 }
 </style>
