@@ -4,14 +4,14 @@
       <el-input prefix-icon="el-icon-search" @input="filterProjects(input)" v-model="input" placeholder="请输入项目名称,按下Enter筛选"></el-input>
     </div>
     <ul class="project-list">
-      <li is="router-link" :to="`/projects/${project.id}`" v-for="project in projects" :key="project.id">
+      <li :to="`/projects/${project.id}`" v-for="project in projects" :key="project.id">
         <span class="project-icon">
-          <i class="el-icon-document"></i>
+          <i class="iconfont icon-xiangmu"></i>
         </span>
         <span class="project-title">{{project.title}}</span>
       </li>
       <li class="project-add">
-        <i class="el-icon-plus"></i>
+        <CreateProject />
       </li>
     </ul>
   </div>
@@ -19,7 +19,10 @@
 
 <script>
   import { mapGetters, mapActions } from "vuex";
+  import CreateProject from "./CreateProject";
+
   export default {
+    components: { CreateProject },
     data() {
       return {
         input: ""
@@ -35,30 +38,25 @@
   };
 </script>
 
-<style>
+<style lang="less">
 .search-input {
   padding: 30px;
 }
-.project-list::after {
-  content: "";
-  display: block;
-  height: 0;
-  clear: both;
-}
 .project-list {
   padding: 0 30px;
-}
-.project-list li {
-  float: left;
-  text-align: center;
-  width: 120px;
-  height: 120px;
-  cursor: pointer;
-}
-li.project-add {
-  line-height: 120px;
-  font-size: 84px;
-  color: #dfdfdf;
+  li {
+    float: left;
+    text-align: center;
+    width: 120px;
+    height: 120px;
+    cursor: pointer;
+  }
+  &::after {
+    content: "";
+    display: block;
+    height: 0;
+    clear: both;
+  }
 }
 .project-title {
   overflow: hidden;
@@ -70,10 +68,12 @@ li.project-add {
   line-height: 24px;
 }
 .project-icon {
-  display: inline-block;
-  font-size: 72px;
+  display: block;
   color: #d1ba74;
   height: 96px;
   line-height: 96px;
+  .iconfont {
+    font-size: 72px;
+  }
 }
 </style>

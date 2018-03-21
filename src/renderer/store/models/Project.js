@@ -1,5 +1,6 @@
 export default class Project {
-    id = Math.random().toString(36).substring(2, 10)
+    // id = Math.random().toString(36).substring(2, 12)
+    id = Date.now()
     updateTime = Date.now()
     createTime = Date.now()
 
