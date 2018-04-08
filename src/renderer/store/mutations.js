@@ -4,5 +4,8 @@ export default {
     },
     filterProjects(state, str) {
         state.filterStr = str
+    },
+    initProject(state, project) {
+        state.project = project
     }
 }

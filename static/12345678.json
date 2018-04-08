@@ -1,15 +1,1 @@
-{
-    "id": 12345678,
-    "title": "TEST",
-    "createTime": 1520579739111,
-    "updateTime": 1520579739111,
-    "apis": {
-        "用户相关": [
-            {
-                "url": "/login",
-                "method": "GET",
-                "schema": {}
-            }
-        ]
-    }
-}
+{"id":12345678,"updateTime":1520579739111,"createTime":1520579739111,"apis":{"用户相关":[{"url":"/login","method":"GET","schema":{}}],"产品相关":[{"url":"/aaa","method":"GET","schema":{}},{"url":"/pod","method":"PUT","schema":{}},{"url":"/opy","method":"DELETE","schema":{}}],"商家相关":[{"url":"/bbb","method":"GET","schema":{}}],"顺便":[{"url":"/abc","method":"POST","schema":{}},{"url":"/dcf","method":"DELETE","schema":{}}]},"title":"TEST"}

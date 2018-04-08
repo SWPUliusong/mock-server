@@ -17,11 +17,13 @@ const writeFileAsync = function (path, data) {
 }
 
 export default {
-    // 项目初始化
-    async initProjects({ commit }, projects) {
+    // 读取所有项目简略信息
+    async findProjects({ state, commit }) {
+        // 若已经获取过，则不再读取文件
+        if (state.projects) return;
         try {
-            let data = await readFileAsync(`${__static}/projects.json`)
-            commit("initProjects", data)
+            let projects = await readFileAsync(`${__static}/projects.json`)
+            commit("initProjects", projects)
         } catch (err) {
             commit("initProjects", [])
         }
@@ -36,22 +38,26 @@ export default {
         let id = project.id
         let data = state.projects.concat([{ id, title }])
 
+        let projectsPath = `${__static}/projects.json`
+        let projectPath = `${__static}/${id}.json`
+
         try {
             await Promise.all([
-                writeFileAsync(`${__static}/projects.json`, data),
-                writeFileAsync(`${__static}/${id}.json`, project),
+                writeFileAsync(projectsPath, data),
+                writeFileAsync(projectPath, project),
             ]);
             commit("initProjects", data)
         } catch (err) {
             // 发生错误时，数据回滚到之前
             await Promise.all([
-                del([`${__static}/${id}.json`]),
-                writeFileAsync(`${__static}/projects.json`, state.projects)
+                del([projectPath]),
+                writeFileAsync(projectsPath, state.projects)
             ])
 
             throw err
         }
     },
+    // 删除项目
     async deleteProject({ state, commit }, id) {
         const projects = state.projects.filter(item => item.id !== id)
         try {
@@ -65,6 +71,7 @@ export default {
             console.error(err)
         }
     },
+    // 项目重命名
     async renameProject({ state, commit }, { id, title }) {
         const projects = _.cloneDeep(state.projects)
         projects.forEach(item => {
@@ -85,5 +92,39 @@ export default {
         } catch (err) {
             console.error(err)
         }
-    }
+    },
+
+    // 获取项目
+    async findProjectById({ state, commit }, id) {
+        // 如果就是当前project，则不再读取文件
+        let project = state.project
+        if (project && project.id === id) {
+            return
+        }
+
+        let projectPath = `${__static}/${id}.json`
+        try {
+            project = await readFileAsync(projectPath)
+            commit("initProject", project)
+        } catch (err) {
+            console.error(err)
+        }
+    },
+
+    // 创建API
+    async createApi({ commit, state }, data) {
+        let project = state.project
+        if (!project.addApi) {
+            project = Project.init(state.project)
+        }
+        const { tag, ...api } = data
+        const projectPath = `${__static}/${project.id}.json`
+        try {
+            project.addApi(tag, api)
+            await writeFileAsync(projectPath, project)
+            commit("initProject", project)
+        } catch (err) {
+            console.error(err)
+        }
+    },
 }

@@ -4,19 +4,19 @@
       <el-input prefix-icon="el-icon-search" @input="filterProjects(input)" v-model="input" placeholder="请输入项目名称,按下Enter筛选"></el-input>
     </div>
     <ul class="project-list">
-      <li class="project-item" :to="`/projects/${project.id}`" v-for="project in projects" :key="project.id">
+      <li class="project-item" is="router-link" :to="`/projects/${project.id}`" v-for="project in projects" :key="project.id">
         <ContextMenu>
           <span class="project-icon">
             <i class="iconfont icon-xiangmu"></i>
           </span>
-          <span class="project-title">{{project.title}}</span>
+          <span class="project-title" :title="project.title">{{project.title}}</span>
 
           <el-menu mode="vertical" slot="menu" class="project-menu" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
-            <el-menu-item index="1" @click.native="openRename(project)">
+            <el-menu-item index="1" @click.native.prevent="openRenameModal(project)">
               <i class="el-icon-edit"></i>
               <span slot="title">重命名</span>
             </el-menu-item>
-            <el-menu-item index="2" @click.native="deleteProject(project.id)">
+            <el-menu-item index="2" @click.native.prevent="deleteProject(project.id)">
               <i class="el-icon-delete"></i>
               <span slot="title">删除</span>
             </el-menu-item>
@@ -77,11 +77,11 @@
     },
     computed: { ...mapGetters(["projects"]) },
     created() {
-      this.$store.dispatch("initProjects");
+      this.$store.dispatch("findProjects");
     },
     methods: {
       ...mapActions(["filterProjects", "deleteProject"]),
-      openRename(project) {
+      openRenameModal(project) {
         this.dialogFormVisible = true;
         this.project = _.clone(project);
         this.$refs["renameProject"].resetFields();
@@ -103,7 +103,8 @@
   };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
+@color: #797979;
 .search-input {
   padding: 30px;
 }
@@ -115,6 +116,16 @@
     width: 120px;
     height: 120px;
     cursor: pointer;
+    overflow: hidden;
+    &:hover {
+      text-decoration: none;
+      background-color: @color;
+      border-radius: 8px;
+      color: #fff;
+      & .project-icon {
+        color: #fff;
+      }
+    }
   }
   &::after {
     content: "";
@@ -129,14 +140,18 @@
   white-space: nowrap;
   display: inline-block;
   font-size: 16px;
+  width: 100%;
   height: 24px;
   line-height: 24px;
+  font-weight: bold;
+  text-align: center;
 }
 .project-icon {
   display: block;
-  color: #d1ba74;
+  color: @color;
   height: 96px;
   line-height: 96px;
+  transition: color 0.4s;
   .iconfont {
     font-size: 72px;
   }
