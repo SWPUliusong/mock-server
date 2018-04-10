@@ -34,7 +34,7 @@ export default {
     },
     // 创建项目
     async createProject({ state, commit }, title) {
-        let project = new Project(title)
+        let project = new Project({ title })
         let id = project.id
         let data = state.projects.concat([{ id, title }])
 
@@ -81,11 +81,13 @@ export default {
         })
 
         let project = await readFileAsync(`${__static}/${id}.json`)
+        project.title = title
+        project.updateTime = Date.now()
 
         try {
             await Promise.all([
                 writeFileAsync(`${__static}/projects.json`, projects),
-                writeFileAsync(`${__static}/${id}.json`, Object.assign({}, project, { title })),
+                writeFileAsync(`${__static}/${id}.json`, project),
             ])
 
             commit("initProjects", projects)
@@ -114,15 +116,47 @@ export default {
     // 创建API
     async createApi({ commit, state }, data) {
         let project = state.project
-        if (!project.addApi) {
-            project = Project.init(state.project)
-        }
+
+        project = new Project(state.project)
+
         const { tag, ...api } = data
         const projectPath = `${__static}/${project.id}.json`
         try {
             project.addApi(tag, api)
             await writeFileAsync(projectPath, project)
-            commit("initProject", project)
+            commit("initProject", project.plain())
+        } catch (err) {
+            console.error(err)
+        }
+    },
+
+    // 修改API
+    async updateApi({ commit, state }, data) {
+        let project = state.project
+
+        project = new Project(state.project)
+
+        const { tag, index, ...api } = data
+        const projectPath = `${__static}/${project.id}.json`
+        try {
+            project.updateApi(tag, index, api)
+            await writeFileAsync(projectPath, project)
+            commit("initProject", project.plain())
+        } catch (err) {
+            console.error(err)
+        }
+    },
+
+    // 删除API
+    async deleteApi({ commit, state }, { tag, index }) {
+        let project = state.project
+        project = new Project(state.project)
+
+        const projectPath = `${__static}/${project.id}.json`
+        try {
+            project.removeApi(tag, index)
+            await writeFileAsync(projectPath, project)
+            commit("initProject", project.plain())
         } catch (err) {
             console.error(err)
         }

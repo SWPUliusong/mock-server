@@ -105,6 +105,7 @@
 
 <style lang="less" scoped>
 @color: #797979;
+@c: rgb(86, 168, 250);
 .search-input {
   padding: 30px;
 }
@@ -119,7 +120,7 @@
     overflow: hidden;
     &:hover {
       text-decoration: none;
-      background-color: @color;
+      background-color: @c;
       border-radius: 8px;
       color: #fff;
       & .project-icon {
@@ -148,7 +149,7 @@
 }
 .project-icon {
   display: block;
-  color: @color;
+  color: @c;
   height: 96px;
   line-height: 96px;
   transition: color 0.4s;

@@ -65,4 +65,7 @@ table {
 p {
   word-wrap: break-word;
 }
+.pull-right {
+  float: right;
+}
 </style>

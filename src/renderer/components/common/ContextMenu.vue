@@ -17,35 +17,21 @@
     components: { Menu },
     mounted() {
       this.$refs["contextmenu"].oncontextmenu = e => {
-        if (menu) {
-          menu.close();
-        }
+        this.closePrev()
 
         menu = this.$refs["menu"];
-        menu.open(e.pageY, e.pageX);
+        menu.open(e.clientY, e.clientX);
       };
 
-      document.onclick = () => {
-        if (!menu) return;
-        menu.close();
-      };
+      document.addEventListener("click", this.closePrev);
+      document.addEventListener("mousewheel", this.closePrev);
     },
-    data() {
-      return {
-        style: {
-          display: "none",
-          top: "0px",
-          left: "0px"
+    methods: {
+      closePrev() {
+        if (menu && menu.isOpen) {
+          menu.close();
         }
-      };
+      }
     }
   };
 </script>
-
-<style scoped lang="less">
-.menu {
-  position: fixed;
-  background-color: #333;
-}
-</style>
-

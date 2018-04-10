@@ -1,5 +1,5 @@
 <template>
-  <div class="menu" :style="{display, top, left}">
+  <div class="menu" :style="{visibility, top, left}">
     <slot></slot>
   </div>
 </template>
@@ -8,23 +8,34 @@
   export default {
     data() {
       return {
-        display: "none",
+        visibility: "hidden",
         top: "0px",
         left: "0px"
       };
     },
+    computed: {
+      isOpen() {
+        return this.visibility === "visible";
+      }
+    },
     methods: {
       open(x, y) {
         Object.assign(this, {
-          display: "block",
+          visibility: "visible",
           top: x + "px",
           left: y + "px"
         });
       },
       close() {
-        this.display = "none";
+        this.visibility = "hidden";
       }
     }
   };
 </script>
 
+<style scoped lang="less">
+.menu {
+  position: fixed;
+  background-color: #333;
+}
+</style>

@@ -4,6 +4,7 @@ class Api {
     url = ""
     method = ""
     schema = {}
+    description = ""
 
     constructor(api) {
         Object.assign(this, api)
@@ -11,22 +12,20 @@ class Api {
 }
 
 export default class Project {
-    // id = Math.random().toString(36).substring(2, 12)
+    title = ""
     id = Date.now()
     updateTime = Date.now()
     createTime = Date.now()
 
     apis = {}
 
-    constructor(title) {
-        this.title = title
+    constructor(data) {
+        Object.assign(this, _.cloneDeep(data))
     }
 
-    // 根据现有数据初始化一个project
-    static init(project) {
-        project = _.cloneDeep(project)
-        if (project.addApi) return project
-        return Object.assign(new this(), project)
+    // 返回一个plain object
+    plain() {
+        return JSON.parse(JSON.stringify(this))
     }
     /**
      * 新增api
@@ -47,6 +46,7 @@ export default class Project {
     }
 
     updateApi(tag, index, api) {
-        this.apis[tag][index] = api
+        this.apis[tag][index] = new Api(api)
     }
+
 }
