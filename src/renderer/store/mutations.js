@@ -7,5 +7,8 @@ export default {
     },
     initProject(state, project) {
         state.project = project
+    },
+    initApi(state, api) {
+        state.api = api
     }
 }

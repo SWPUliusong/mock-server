@@ -3,6 +3,7 @@ import del from "del"
 import { promisify } from "util"
 import _ from "lodash"
 import Project from "./models/Project"
+import Api from "./models/Api"
 
 const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)
@@ -32,6 +33,8 @@ export default {
     filterProjects({ commit }, filterStr) {
         commit("filterProjects", filterStr)
     },
+
+    // 操作Project
     // 创建项目
     async createProject({ state, commit }, title) {
         let project = new Project({ title })
@@ -95,7 +98,6 @@ export default {
             console.error(err)
         }
     },
-
     // 获取项目
     async findProjectById({ state, commit }, id) {
         // 如果就是当前project，则不再读取文件
@@ -113,6 +115,7 @@ export default {
         }
     },
 
+    // 操作Api
     // 创建API
     async createApi({ commit, state }, data) {
         let project = state.project
@@ -129,7 +132,6 @@ export default {
             console.error(err)
         }
     },
-
     // 修改API
     async updateApi({ commit, state }, data) {
         let project = state.project
@@ -146,7 +148,6 @@ export default {
             console.error(err)
         }
     },
-
     // 删除API
     async deleteApi({ commit, state }, { tag, index }) {
         let project = state.project
@@ -157,6 +158,42 @@ export default {
             project.removeApi(tag, index)
             await writeFileAsync(projectPath, project)
             commit("initProject", project.plain())
+        } catch (err) {
+            console.error(err)
+        }
+    },
+    // 获取api
+    findApi({ commit, state }, { tag, index }) {
+        let project = state.project
+
+        if (project) {
+            let api = _.cloneDeep(project.apis[tag][index])
+            return commit("initApi", Object.assign(api, { tag, index }))
+        }
+        return commit("initApi", null)
+    },
+
+    // 操作Schema
+    // 修改
+    async updateSchema({ commit, state, dispatch }, payload) {
+        let api = new Api(state.api)
+
+        try {
+            api.updateSchema(payload)
+            await dispatch("updateApi", api)
+            commit("initApi", api)
+        } catch (err) {
+            console.error(err)
+        }
+    },
+    // 删除字段
+    async deleteField({ commit, state, dispatch }, { key }) {
+        let api = _.cloneDeep(state.api)
+
+        try {
+            delete api.schema[key]
+            await dispatch("updateApi", api)
+            commit("initApi", api)
         } catch (err) {
             console.error(err)
         }

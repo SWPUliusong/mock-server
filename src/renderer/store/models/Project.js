@@ -1,15 +1,5 @@
 import _ from "lodash"
-
-class Api {
-    url = ""
-    method = ""
-    schema = {}
-    description = ""
-
-    constructor(api) {
-        Object.assign(this, api)
-    }
-}
+import Api from "./Api"
 
 export default class Project {
     title = ""

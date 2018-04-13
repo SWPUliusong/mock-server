@@ -1,5 +1,5 @@
 <template>
-  <span class="update-api" index="1" @click.stop="open">
+  <span class="update-api" index="1" @click.stop.prevent="open">
     <i class="el-icon-edit"></i>
 
     <el-dialog title="修改API" :visible.sync="dialogFormVisible">

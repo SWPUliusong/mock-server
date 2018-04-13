@@ -1,8 +1,8 @@
 {
-  "name": "first-electron",
-  "version": "0.0.0",
+  "name": "mock-server",
+  "version": "0.1.0",
   "author": "liusong <swpuliusong@foxmail.com>",
-  "description": "An electron-vue project",
+  "description": "启动一个本地服务器，根据配置的数据结构，生成url和对应的数据",
   "license": null,
   "main": "./dist/electron/main.js",
   "scripts": {
@@ -17,7 +17,7 @@
     "postinstall": ""
   },
   "build": {
-    "productName": "first-electron",
+    "productName": "mock-server",
     "appId": "org.simulatedgreg.electron-vue",
     "directories": {
       "output": "build"

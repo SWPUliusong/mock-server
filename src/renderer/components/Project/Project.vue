@@ -34,7 +34,15 @@
               </span>
               <span class="api-desc" :title="api.description">{{api.description}}</span>
             </template>
-            <Schema :value="api.schema"></Schema>
+            <div class="api-schema">
+              <strong>API将按以下格式生成数据: </strong>
+              <p class="show-schema">
+                <pre>{{formatSchema(api.schema)}}</pre>
+                <router-link :to="`/tags/${tag}/schema/${index}`">
+                  <el-button class="schema-edit" type="info" icon="el-icon-edit">修改Schema</el-button>
+                </router-link>
+              </p>
+            </div>
           </el-collapse-item>
         </el-collapse>
       </el-collapse-item>
@@ -44,12 +52,12 @@
 
 <script>
   import { mapGetters, mapActions, mapState } from "vuex";
+  import _ from "lodash"
   import ContextMenu from "../common/ContextMenu";
   import CreateApi from "./CreateApi";
   import UpdateApi from "./UpdateApi";
-  import Schema from "./Schema";
   export default {
-    components: { CreateApi, UpdateApi, Schema, ContextMenu },
+    components: { CreateApi, UpdateApi, ContextMenu },
     data() {
       return {
         flag: true,
@@ -88,6 +96,16 @@
             message: "已取消删除"
           });
         }
+      },
+      formatSchema(val) {
+        val = _.cloneDeep(val)
+        Object.keys(val).forEach(key => {
+          let item = val[key];
+          if(Array.isArray(item)) {
+            val[key] = item[item.length - 1];
+          }
+        });
+        return JSON.stringify(val, null, 4).trim();
       }
     }
   };
@@ -159,5 +177,22 @@
   width: 40%;
   color: #999;
   text-align: right;
+}
+
+.api-schema {
+  padding: 15px 0 0 15px;
+}
+.show-schema {
+  position: relative;
+  border: 1px solid #989898;
+  border-radius: 3px;
+  font-size: 16px;
+  box-shadow: inset 0 0 8px rgba(23, 23, 23, 0.6);
+  padding: 10px;
+}
+.schema-edit {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 </style>

@@ -3,5 +3,7 @@ export default {
     projects: null,
     filterStr: "",
     // 当前进行中的项目
-    project: {}
+    project: {},
+    // 修改的api
+    api: null
 }

@@ -16,6 +16,11 @@ export default new Router({
       component: require('@/components/Project/Project').default
     },
     {
+      path: '/tags/:tag/schema/:index',
+      name: 'schema',
+      component: require('@/components/Schema/Schema').default
+    },
+    {
       path: '*',
       redirect: '/'
     }

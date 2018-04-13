@@ -22,6 +22,7 @@ h4,
 h5,
 h6,
 p,
+pre,
 th,
 td,
 dl,
@@ -64,6 +65,9 @@ table {
 }
 p {
   word-wrap: break-word;
+}
+.pull-left {
+  float: left;
 }
 .pull-right {
   float: right;
