@@ -4,7 +4,7 @@ export class Params {
     type = "plain";
     // 字段名
     key = "";
-    // 字段值
+    // 当字段类型为普通键值对或数组时，代表字段值
     value = [];
     // 当字段是array时，指明长度
     len = 10;
@@ -12,7 +12,7 @@ export class Params {
     obj = {};
 }
 
-// 子字段类型
+// 新增子字段时的结构
 export class ChildFeild {
     key = "";
     value = [];
@@ -24,4 +24,26 @@ export const Types = {
     array: "数组",
     object: "对象",
     collection: "集合",
+}
+
+// 返回params需要的各种参数
+export function getParams(field) {
+    let { key, schemaValue } = field;
+    let value, len, obj;
+    let { __type__: type, ...otherObj } = schemaValue;
+    switch (type) {
+        case 'array':
+            ({ len, value } = otherObj)
+            break
+        case 'object':
+            obj = otherObj
+            break;
+        case 'collection':
+            ({ len, value: obj } = otherObj)
+            break;
+        default:
+            value = otherObj
+    }
+
+    return { key, value, type, len, obj }
 }

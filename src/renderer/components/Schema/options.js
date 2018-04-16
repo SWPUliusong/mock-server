@@ -1,30 +1,24 @@
-// export default {
-//     string: "String",
-//     number: "Number",
-//     boolean: "Boolean",
-// }
-
 export default [
     {
         value: "@boolean",
         label: "布尔值",
     },
     {
+        value: "id",
+        label: "Id",
+        children: [
+            { label: "id", value: "@id" },
+            { label: "guid", value: "@guid" },
+            { label: "增量", value: "@increment" },
+        ]
+    },
+    {
         value: "number",
         label: "数字",
         children: [
-            {
-                value: "@natural",
-                label: "自然数",
-            },
-            {
-                value: "@integer",
-                label: "整数",
-            },
-            {
-                value: "@float(0, 100000000, 2, 2)",
-                label: "浮点数",
-            }
+            { value: "@natural", label: "自然数" },
+            { value: "@integer", label: "整数" },
+            { value: "@float(0, 100000000, 2, 2)", label: "浮点数" }
         ]
     },
     {
@@ -132,15 +126,6 @@ export default [
             { label: "协议", value: "@protocol" },
             { label: "邮箱", value: "@email" },
             { label: "IP", value: "@ip" },
-        ]
-    },
-    {
-        value: "id",
-        label: "Id",
-        children: [
-            { label: "id", value: "@id" },
-            { label: "guid", value: "@guid" },
-            { label: "增量", value: "@increment" },
         ]
     },
     {

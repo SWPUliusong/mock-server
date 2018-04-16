@@ -4,8 +4,11 @@
       <el-col :span="2">
         <span class="el-icon-arrow-left back" @click="$router.replace('/')"></span>
       </el-col>
-      <el-col :span="20" class="project-title" :title="project.title">
+      <el-col :span="18" class="project-title" :title="project.title">
         {{project.title}}
+      </el-col>
+      <el-col :span="4" style="line-height: 56px;">
+        <el-button type="success">启动服务器</el-button>
       </el-col>
     </el-row>
     <el-row class="project-option">
@@ -14,7 +17,6 @@
       </el-col>
       <el-col :span="20" class="project-btn">
         <CreateApi />
-        <el-button type="primary">启动服务器</el-button>
       </el-col>
     </el-row>
     <el-collapse :value="collapse">
@@ -51,13 +53,14 @@
 </template>
 
 <script>
-  import { mapGetters, mapActions, mapState } from "vuex";
-  import _ from "lodash"
-  import ContextMenu from "../common/ContextMenu";
+  import { mapActions, mapState } from "vuex";
+  import _ from "lodash";
   import CreateApi from "./CreateApi";
   import UpdateApi from "./UpdateApi";
+  import { formatSchema } from "./util";
+
   export default {
-    components: { CreateApi, UpdateApi, ContextMenu },
+    components: { CreateApi, UpdateApi },
     data() {
       return {
         flag: true,
@@ -74,6 +77,7 @@
       ...mapState(["project"])
     },
     methods: {
+      formatSchema,
       ...mapActions(["findProjectById"]),
       collapseAll(val) {
         if (val) {
@@ -96,16 +100,6 @@
             message: "已取消删除"
           });
         }
-      },
-      formatSchema(val) {
-        val = _.cloneDeep(val)
-        Object.keys(val).forEach(key => {
-          let item = val[key];
-          if(Array.isArray(item)) {
-            val[key] = item[item.length - 1];
-          }
-        });
-        return JSON.stringify(val, null, 4).trim();
       }
     }
   };

@@ -105,7 +105,7 @@
 
 <style lang="less" scoped>
 @color: #797979;
-@c: rgb(86, 168, 250);
+@c: rgb(104, 109, 105);
 .search-input {
   padding: 30px;
 }

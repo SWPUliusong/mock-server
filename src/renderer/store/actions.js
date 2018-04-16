@@ -2,8 +2,7 @@ import fs from "fs"
 import del from "del"
 import { promisify } from "util"
 import _ from "lodash"
-import Project from "./models/Project"
-import Api from "./models/Api"
+import { Project, Api } from "./models"
 
 const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)
@@ -120,14 +119,23 @@ export default {
     async createApi({ commit, state }, data) {
         let project = state.project
 
-        project = new Project(state.project)
-
         const { tag, ...api } = data
         const projectPath = `${__static}/${project.id}.json`
         try {
-            project.addApi(tag, api)
-            await writeFileAsync(projectPath, project)
-            commit("initProject", project.plain())
+            commit("addApi", { tag, api })
+            await writeFileAsync(projectPath, state.project)
+        } catch (err) {
+            console.error(err)
+        }
+    },
+    // 删除API
+    async deleteApi({ commit, state }, { tag, index }) {
+        let project = state.project
+
+        const projectPath = `${__static}/${project.id}.json`
+        try {
+            commit("removeApi", { tag, index })
+            await writeFileAsync(projectPath, state.project)
         } catch (err) {
             console.error(err)
         }
@@ -136,28 +144,11 @@ export default {
     async updateApi({ commit, state }, data) {
         let project = state.project
 
-        project = new Project(state.project)
-
         const { tag, index, ...api } = data
         const projectPath = `${__static}/${project.id}.json`
         try {
-            project.updateApi(tag, index, api)
-            await writeFileAsync(projectPath, project)
-            commit("initProject", project.plain())
-        } catch (err) {
-            console.error(err)
-        }
-    },
-    // 删除API
-    async deleteApi({ commit, state }, { tag, index }) {
-        let project = state.project
-        project = new Project(state.project)
-
-        const projectPath = `${__static}/${project.id}.json`
-        try {
-            project.removeApi(tag, index)
-            await writeFileAsync(projectPath, project)
-            commit("initProject", project.plain())
+            commit("updateApi", { tag, index, api })
+            await writeFileAsync(projectPath, state.project)
         } catch (err) {
             console.error(err)
         }
@@ -175,25 +166,23 @@ export default {
 
     // 操作Schema
     // 修改
-    async updateSchema({ commit, state, dispatch }, payload) {
-        let api = new Api(state.api)
-
+    async updateSchema({ commit, state }, payload) {
+        let { id } = state.project
+        const projectPath = `${__static}/${id}.json`
         try {
-            api.updateSchema(payload)
-            await dispatch("updateApi", api)
-            commit("initApi", api)
+            commit("updateSchema", payload)
+            await writeFileAsync(projectPath, state.project)
         } catch (err) {
             console.error(err)
         }
     },
     // 删除字段
     async deleteField({ commit, state, dispatch }, { key }) {
-        let api = _.cloneDeep(state.api)
-
+        let { id } = state.project
+        const projectPath = `${__static}/${id}.json`
         try {
-            delete api.schema[key]
-            await dispatch("updateApi", api)
-            commit("initApi", api)
+            commit("deleteField", { key })
+            await writeFileAsync(projectPath, state.project)
         } catch (err) {
             console.error(err)
         }

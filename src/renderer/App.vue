@@ -6,7 +6,7 @@
 
 <script>
   export default {
-    name: "first-electron"
+    name: "mock-server"
   };
 </script>
 

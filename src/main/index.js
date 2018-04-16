@@ -18,9 +18,9 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    height: 600,
-    useContentSize: true,
-    width: 1000
+    height: 750,
+    useContentSize: process.env.NODE_ENV === 'development',
+    width: 960,
   })
 
   mainWindow.loadURL(winURL)
