@@ -42,7 +42,9 @@ export function getParams(field) {
             ({ len, value: obj } = otherObj)
             break;
         default:
-            value = otherObj
+            // 为type提供默认值
+            type = 'plain'
+            value = schemaValue
     }
 
     return { key, value, type, len, obj }

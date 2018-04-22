@@ -102,20 +102,18 @@
         }
       },
       startServer() {
-        this.$prompt("请输入端口", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          inputValidator(port) {
-            port = parseInt(port);
-            return port > 1023 && port < 49152;
-          },
-          inputErrorMessage: "端口只能是1024-49151"
-        })
+        this
+          .$prompt("请输入端口", "提示", {
+            confirmButtonText: "确定",
+            cancelButtonText: "取消",
+            inputValidator(port) {
+              port = parseInt(port);
+              return port > 1023 && port < 49152;
+            },
+            inputErrorMessage: "端口只能是1024-49151"
+          })
           .then(({ value }) => {
-            this.$message({
-              type: "success",
-              message: "你的邮箱是: " + value
-            });
+            
           })
           .catch(() => {
             this.$message({
