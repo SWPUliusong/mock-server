@@ -29,7 +29,7 @@
                         "__type__": "array",
                         "value": [
                             "image",
-                            "@image('800x600', 'color', 'color', 'Hello Mock.js')"
+                            "@image('800x600', '@color', '@color', 'Hello Mock.js')"
                         ],
                         "len": 14
                     }

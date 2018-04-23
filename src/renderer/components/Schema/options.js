@@ -100,19 +100,19 @@ export default [
         label: "图片",
         children: [
             {
-                value: "@image('600x800', 'color', 'color', 'Hello Mock.js')",
+                value: "@image('600x800', '@color', '@color', 'Hello Mock.js')",
                 label: "600x800 (Mock.js)",
             },
             {
-                value: "@image('800x600', 'color', 'color', 'Hello Mock.js')",
+                value: "@image('800x600', '@color', '@color', 'Hello Mock.js')",
                 label: "800x600 (Mock.js)",
             },
             {
-                value: "@image('1024x768', 'color', 'color', 'Hello Mock.js')",
+                value: "@image('1024x768', '@color', '@color', 'Hello Mock.js')",
                 label: "1024x768 (Mock.js)",
             },
             {
-                value: "@image('1600x900', 'color', 'color', 'Hello Mock.js')",
+                value: "@image('1600x900', '@color', '@color', 'Hello Mock.js')",
                 label: "1600x900 (Mock.js)",
             },
         ]

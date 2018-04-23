@@ -1,39 +1,56 @@
 import Router from "koa-router"
-import store from "../../store"
 import Mock from "mockjs"
 
-const router = new Router()
+export default function loadRouter(app, options) {
+    const router = new Router()
+    let apis = options.apis
+    Object.keys(apis).forEach(tag => {
+        apis[tag].forEach(api => {
+            router[api.method.toLowerCase()](api.url, (ctx, next) => {
+                let result = {}
+                Object.keys(api.schema).forEach(key => {
+                    result[key] = createData(api.schema[key])
+                })
 
-let apis = store.project.apis
-Object.keys(apis).forEach(tag => {
-    apis[tag].forEach(api => {
-        router[api.method.toLowerCase()](api.url, (ctx, next) => {
-            let result = {}
-            Object.keys(api.schema).forEach(key => {
-                result[key] = createData(api.schema[key])
+                ctx.body = result
             })
-
-            ctx.body = result
         })
     })
-})
+
+    app.use(router.routes()).use(router.allowedMethods());
+}
+
+function shiftColor(str) {
+    // 分两步替换背景和字体颜色
+    return str
+        .replace("@color", Mock.mock("@color"))
+        .replace("@color", Mock.mock("@color"))
+}
 
 function createData(pattern) {
     let { __type__: type, ...obj } = pattern
-    let result, len, value
+    /**
+     * result: 最后结果
+     * len：当type为数组和集合时，指明生成的数据长度
+     * value：当type为数组和集合时，指明数据结构
+     * tpl：提供给Mock的数据生成模板
+     */
+    let result, len, value, tpl
     switch (type) {
         case 'array':
             ({ len, value } = obj);
             result = []
             while (len--) {
-                result.push(Mock.mock(value[value.length - 1]))
+                tpl = shiftColor(value[value.length - 1])
+                result.push(Mock.mock(tpl))
             }
             break
         case "object":
             result = {}
             Object.keys(obj).forEach(key => {
                 let item = obj[key]
-                result[key] = Mock.mock(item[item.length - 1])
+                tpl = shiftColor(item[item.length - 1])
+                result[key] = Mock.mock(tpl)
             })
             break
         case "collection":
@@ -44,13 +61,15 @@ function createData(pattern) {
                 let childObj = {}
                 keys.forEach(key => {
                     let item = value[key]
-                    childObj[key] = Mock.mock(item[item.length - 1])
+                    tpl = shiftColor(item[item.length - 1])
+                    childObj[key] = Mock.mock(tpl)
                 })
                 result.push(childObj)
             }
             break
         default:
-            result = Mock.mock(pattern[pattern.length - 1])
+            tpl = shiftColor(pattern[pattern.length - 1])
+            result = Mock.mock(tpl)
     }
 
     return result
