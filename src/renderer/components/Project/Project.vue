@@ -113,7 +113,7 @@
             inputErrorMessage: "端口只能是1024-49151"
           })
           .then(({ value }) => {
-            
+            return this.$store.dispatch("startServer", value)
           })
           .catch(() => {
             this.$message({

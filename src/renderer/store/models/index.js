@@ -28,3 +28,11 @@ export class Project {
     }
 }
 
+export class ServerInfo {
+    // 对应的项目id
+    id = ""
+    // 对应端口
+    port = 0
+    // 打印的日志
+    logger = []
+}

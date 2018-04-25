@@ -1,7 +1,7 @@
-import Router from "koa-router"
-import Mock from "mockjs"
+const Router = require("koa-router")
+const Mock = require("mockjs")
 
-export default function loadRouter(app, options) {
+module.exports = function loadRouter(app, options) {
     const router = new Router()
     let apis = options.apis
     Object.keys(apis).forEach(tag => {
@@ -21,7 +21,7 @@ export default function loadRouter(app, options) {
 }
 
 function shiftColor(str) {
-    // 分两步替换背景和字体颜色
+    // 分两步替换不同的背景和字体颜色
     return str
         .replace("@color", Mock.mock("@color"))
         .replace("@color", Mock.mock("@color"))

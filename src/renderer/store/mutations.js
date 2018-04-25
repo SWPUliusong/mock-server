@@ -1,4 +1,4 @@
-import { Api } from "./models"
+import { Api, ServerInfo } from "./models"
 import _ from "lodash"
 
 export default {
@@ -81,5 +81,25 @@ export default {
 
         state.project = project
         state.api = api
+    },
+
+    // 创建服务器
+    createServer(state, { id, port, server }) {
+        let serverInfo = new ServerInfo()
+        Object.assign(serverInfo, { id, port, server })
+        state.serverInfo = serverInfo
+    },
+    // 关闭服务器
+    closeServer(state) {
+        state.serverInfo = new ServerInfo()
+    },
+    // 接受服务器打印的日志
+    receiveLog(state, { log, time = Date.now() }) {
+        let logger = state.serverInfo.logger
+        // 最多保留50条记录
+        if(logger.length >= 50) {
+            logger.shift()
+        }
+        logger.push({ time, log })
     }
 }

@@ -3,6 +3,7 @@ import del from "del"
 import { promisify } from "util"
 import _ from "lodash"
 import { Project, Api } from "./models"
+import { Server } from "../Server"
 
 const readFile = promisify(fs.readFile)
 const writeFile = promisify(fs.writeFile)
@@ -187,4 +188,35 @@ export default {
             console.error(err)
         }
     },
+
+    // 启动服务器
+    startServer({ state, commit }, port) {
+        let options = state.project
+        let id = options.id
+        let server = new Server(port, options)
+        // 监听日志消息
+        server.on("data", log => {
+            log = `<pre style="color: #fff">${log}</pre>`
+            commit("receiveLog", { log })
+        })
+        server.on("error", log => {
+            log = `<pre style="color: red">${log}</pre>`
+            commit("receiveLog", { log })
+        })
+
+        commit("createServer", { id, port, options })
+    },
+    // 关闭服务器
+    closeServer({state, commit}) {
+        let { server } = state.serverInfo
+        if(!server) return
+        server.close()
+    },
+    // 重启服务器
+    restartServer({state, commit}) {
+        let { server } = state.serverInfo
+        if(server) {
+            server.restart()
+        }
+    }
 }

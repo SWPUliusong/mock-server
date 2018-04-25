@@ -1,6 +1,6 @@
-import * as Koa from "koa"
-import * as logger from "koa-logger"
-import loadRouter from "./router"
+const Koa = require("koa")
+const logger = require("koa-logger")
+const loadRouter = require("./router")
 
 // type：事件类型,提供这几种类型["START", "RESTART", "CLOSE"]
 const Handles = {
@@ -25,10 +25,10 @@ const Handles = {
     }
 }
 
-process.on("message", function ({ type, data }) {
+process.on("message", function ({ type, options }) {
     let handle = Handles[type]
     if (handle) {
-        return handle(data)
+        return handle(options)
     }
 
     console.log("没有对应的事件处理器！！！")
