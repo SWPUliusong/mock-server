@@ -190,10 +190,13 @@ export default {
     },
 
     // 启动服务器
-    startServer({ state, commit }, port) {
+    async startServer({ state, commit }, port) {
         let options = state.project
         let id = options.id
+
         let server = new Server(port, options)
+        await server.start()
+        console.log(121111111111111111111111111111111111111111111)
         // 监听日志消息
         server.on("data", log => {
             log = `<pre style="color: #fff">${log}</pre>`
@@ -204,19 +207,21 @@ export default {
             commit("receiveLog", { log })
         })
 
-        commit("createServer", { id, port, options })
+        commit("createServer", { id, port, server })
     },
     // 关闭服务器
-    closeServer({state, commit}) {
+    async closeServer({ state, commit }) {
         let { server } = state.serverInfo
-        if(!server) return
-        server.close()
+        if (!server) return
+        await server.close()
+        commit("closeServer")
     },
     // 重启服务器
-    restartServer({state, commit}) {
+    async restartServer({ state, commit }) {
         let { server } = state.serverInfo
-        if(server) {
-            server.restart()
+        if (server) {
+            await server.restart()
+            commit("restartServer")
         }
     }
 }

@@ -93,6 +93,10 @@ export default {
     closeServer(state) {
         state.serverInfo = new ServerInfo()
     },
+    // 重启服务器
+    restartServer(state) {
+        state.serverInfo.logger = []
+    },
     // 接受服务器打印的日志
     receiveLog(state, { log, time = Date.now() }) {
         let logger = state.serverInfo.logger

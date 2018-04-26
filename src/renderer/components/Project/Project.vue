@@ -8,7 +8,8 @@
         {{project.title}}
       </el-col>
       <el-col :span="4" style="line-height: 56px;">
-        <el-button type="success" @click="startServer">启动服务器</el-button>
+        <el-button type="success" @click="startServer" v-if="!serverInfo.id">启动服务器</el-button>
+        <el-button type="success" @click="closeServer" v-else>关闭服务器</el-button>
       </el-col>
     </el-row>
     <el-row class="project-option">
@@ -74,11 +75,11 @@
       });
     },
     computed: {
-      ...mapState(["project"])
+      ...mapState(["project", "serverInfo"])
     },
     methods: {
       formatSchema,
-      ...mapActions(["findProjectById"]),
+      ...mapActions(["findProjectById", "closeServer"]),
       collapseAll(val) {
         if (val) {
           this.collapse = Object.keys(this.project.apis);
@@ -102,24 +103,26 @@
         }
       },
       startServer() {
-        this
-          .$prompt("请输入端口", "提示", {
-            confirmButtonText: "确定",
-            cancelButtonText: "取消",
-            inputValidator(port) {
-              port = parseInt(port);
-              return port > 1023 && port < 49152;
-            },
-            inputErrorMessage: "端口只能是1024-49151"
-          })
+        this.$prompt("请输入端口", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          inputValidator(port) {
+            port = parseInt(port);
+            return port > 1023 && port < 49152;
+          },
+          inputErrorMessage: "端口只能是1024-49151"
+        })
           .then(({ value }) => {
-            return this.$store.dispatch("startServer", value)
+            return this.$store.dispatch("startServer", value);
           })
-          .catch(() => {
-            this.$message({
-              type: "info",
-              message: "取消输入"
-            });
+          .catch(err => {
+            if (err !== "cancel") {
+              this.$notify.error({
+                title: "错误",
+                message: err
+              });
+              return;
+            }
           });
       }
     }

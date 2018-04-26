@@ -28,7 +28,7 @@ function shiftColor(str) {
 }
 
 function createData(pattern) {
-    let { __type__: type, ...obj } = pattern
+    let type = pattern.__type__
     /**
      * result: 最后结果
      * len：当type为数组和集合时，指明生成的数据长度
@@ -38,7 +38,8 @@ function createData(pattern) {
     let result, len, value, tpl
     switch (type) {
         case 'array':
-            ({ len, value } = obj);
+            len = pattern.len
+            value = pattern.value
             result = []
             while (len--) {
                 tpl = shiftColor(value[value.length - 1])
@@ -47,14 +48,16 @@ function createData(pattern) {
             break
         case "object":
             result = {}
-            Object.keys(obj).forEach(key => {
-                let item = obj[key]
+            Object.keys(pattern).forEach(key => {
+                if (key === "__type__") return
+                let item = pattern[key]
                 tpl = shiftColor(item[item.length - 1])
                 result[key] = Mock.mock(tpl)
             })
             break
         case "collection":
-            ({ len, value } = obj);
+            len = pattern.len
+            value = pattern.value
             result = []
             let keys = Object.keys(value)
             while (len--) {

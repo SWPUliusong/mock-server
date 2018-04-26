@@ -18,6 +18,7 @@ const Handles = {
         let port = options.port || 3000
         app.listen(port, () => {
             console.log(`${options.title}模拟数据服务器已启动在${port}端口了`)
+            process.send({ type: "listening" })
         })
     },
     CLOSE() {

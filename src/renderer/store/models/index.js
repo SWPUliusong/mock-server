@@ -33,6 +33,8 @@ export class ServerInfo {
     id = ""
     // 对应端口
     port = 0
+    // 服务器
+    server = null
     // 打印的日志
     logger = []
 }
