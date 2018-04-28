@@ -196,14 +196,8 @@ export default {
 
         let server = new Server(port, options)
         await server.start()
-        console.log(121111111111111111111111111111111111111111111)
         // 监听日志消息
         server.on("data", log => {
-            log = `<pre style="color: #fff">${log}</pre>`
-            commit("receiveLog", { log })
-        })
-        server.on("error", log => {
-            log = `<pre style="color: red">${log}</pre>`
             commit("receiveLog", { log })
         })
 
