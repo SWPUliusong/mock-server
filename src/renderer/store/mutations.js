@@ -84,9 +84,9 @@ export default {
     },
 
     // 创建服务器
-    createServer(state, { id, port, server }) {
+    createServer(state, { id, port }) {
         let serverInfo = new ServerInfo()
-        Object.assign(serverInfo, { id, port, server })
+        Object.assign(serverInfo, { id, port })
         state.serverInfo = serverInfo
     },
     // 关闭服务器
@@ -95,15 +95,15 @@ export default {
     },
     // 重启服务器
     restartServer(state) {
-        state.serverInfo.logger = []
+        state.serverInfo.loggers = []
     },
     // 接受服务器打印的日志
     receiveLog(state, { log, time = Date.now() }) {
-        let logger = state.serverInfo.logger
+        let loggers = state.serverInfo.loggers
         // 最多保留50条记录
-        if(logger.length >= 50) {
-            logger.shift()
+        if(loggers.length >= 50) {
+            loggers.shift()
         }
-        logger.push({ time, log })
+        loggers.push({ time, log })
     }
 }

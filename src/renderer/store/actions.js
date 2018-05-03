@@ -17,6 +17,9 @@ const writeFileAsync = function (path, data) {
     return writeFile(path, data)
 }
 
+// 提供一个全局变量保存启动的服务器
+let server = null
+
 export default {
     // 读取所有项目简略信息
     async findProjects({ state, commit }) {
@@ -194,25 +197,24 @@ export default {
         let options = state.project
         let id = options.id
 
-        let server = new Server(port, options)
+        server = new Server(port, options)
         await server.start()
         // 监听日志消息
         server.on("data", log => {
             commit("receiveLog", { log })
         })
 
-        commit("createServer", { id, port, server })
+        commit("createServer", { id, port })
     },
     // 关闭服务器
     async closeServer({ state, commit }) {
-        let { server } = state.serverInfo
         if (!server) return
         await server.close()
+        server = null
         commit("closeServer")
     },
     // 重启服务器
     async restartServer({ state, commit }) {
-        let { server } = state.serverInfo
         if (server) {
             await server.restart()
             commit("restartServer")

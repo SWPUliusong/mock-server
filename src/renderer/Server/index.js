@@ -3,9 +3,8 @@ import * as path from "path"
 import { EventEmitter } from "events"
 /**
  * 主进程以下列格式通知子进程
- * {type: string, data: any}
+ * {type: string, [...: any]}
  * type：事件类型,提供这几种类型["START", "RESTART", "CLOSE"]
- * data：数据
  */
 const EventTypes = ["START", "RESTART", "CLOSE"]
 
@@ -39,11 +38,11 @@ export class Server extends EventEmitter {
                     }
                 })
                 child.stdout.on("data", data => {
-                    console.log(`子进程消息:  ${data.toString()}`)
+                    // console.log(`子进程消息:  ${data.toString()}`)
                     this.emit("data", data.toString())
                 })
                 child.stderr.once("data", data => {
-                    console.log(`子进程错误消息:  ${data.toString()}`)
+                    // console.log(`子进程错误消息:  ${data.toString()}`)
                     this.close().then(() => reject(data.toString()))
                 })
             } catch (err) {

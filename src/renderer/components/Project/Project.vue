@@ -4,13 +4,16 @@
       <el-col :span="2">
         <span class="el-icon-arrow-left back" @click="$router.replace('/')"></span>
       </el-col>
-      <el-col :span="18" class="project-title" :title="project.title">
+      <el-col :span="20" class="project-title" :title="project.title">
         {{project.title}}
       </el-col>
-      <el-col :span="4" style="line-height: 56px;">
-        <el-button type="success" @click="startServer" v-if="!serverInfo.id">启动服务器</el-button>
-        <el-button type="success" @click="closeServer" v-else>关闭服务器</el-button>
-      </el-col>
+    </el-row>
+    <el-row style="margin: 10px 0; text-align: right">
+      <ServerOperate></ServerOperate>
+    </el-row>
+    <el-row style="margin: 10px 0;">
+      <el-alert title="新建和修改api记得重启服务器！！！" type="warning" :closable="false">
+      </el-alert>
     </el-row>
     <el-row class="project-option">
       <el-col :span="4">
@@ -56,12 +59,14 @@
 <script>
   import { mapActions, mapState } from "vuex";
   import _ from "lodash";
-  import CreateApi from "./CreateApi";
-  import UpdateApi from "./UpdateApi";
   import { formatSchema } from "./util";
 
+  import CreateApi from "./CreateApi";
+  import UpdateApi from "./UpdateApi";
+  import ServerOperate from "./ServerOperate";
+
   export default {
-    components: { CreateApi, UpdateApi },
+    components: { CreateApi, UpdateApi, ServerOperate },
     data() {
       return {
         flag: true,
@@ -75,11 +80,11 @@
       });
     },
     computed: {
-      ...mapState(["project", "serverInfo"])
+      ...mapState(["project"])
     },
     methods: {
       formatSchema,
-      ...mapActions(["findProjectById", "closeServer"]),
+      ...mapActions(["findProjectById"]),
       collapseAll(val) {
         if (val) {
           this.collapse = Object.keys(this.project.apis);
@@ -101,29 +106,6 @@
             message: "已取消删除"
           });
         }
-      },
-      startServer() {
-        this.$prompt("请输入端口", "提示", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          inputValidator(port) {
-            port = parseInt(port);
-            return port > 1023 && port < 49152;
-          },
-          inputErrorMessage: "端口只能是1024-49151"
-        })
-          .then(({ value }) => {
-            return this.$store.dispatch("startServer", value);
-          })
-          .catch(err => {
-            if (err !== "cancel") {
-              this.$notify.error({
-                title: "错误",
-                message: err
-              });
-              return;
-            }
-          });
       }
     }
   };

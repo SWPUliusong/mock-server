@@ -32,5 +32,6 @@ process.on("message", function ({ type, options }) {
         return handle(options)
     }
 
-    console.log("没有对应的事件处理器！！！")
+    console.error("没有对应的事件处理器！！！")
+    process.exit(1)
 })

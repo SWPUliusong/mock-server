@@ -8,13 +8,11 @@ export default {
     api: null,
     // 服务器信息
     serverInfo: {
-        // 开启的服务器对象
-        server: null,
         // 对应的项目id
         id: "",
         // 对应端口
         port: 0,
         // 打印的日志
-        logger: []
+        loggers: []
     }
 }
