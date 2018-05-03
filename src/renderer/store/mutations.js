@@ -101,7 +101,7 @@ export default {
     receiveLog(state, { log, time = Date.now() }) {
         let loggers = state.serverInfo.loggers
         // 最多保留50条记录
-        if(loggers.length >= 50) {
+        if(loggers.length >= 100) {
             loggers.shift()
         }
         loggers.push({ time, log })
