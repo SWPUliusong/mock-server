@@ -43,7 +43,7 @@
         dialogFormVisible: false,
         methods: ["GET", "POST", "PUT", "DELETE"],
         params: {
-          tag: "default",
+          tag: "",
           url: "",
           method: "GET",
           description: ""
