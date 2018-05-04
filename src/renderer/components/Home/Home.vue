@@ -16,7 +16,7 @@
               <i class="el-icon-edit"></i>
               <span slot="title">重命名</span>
             </el-menu-item>
-            <el-menu-item index="2" @click.native.prevent="deleteProject(project.id)">
+            <el-menu-item index="2" @click.native.prevent="deleteProject(project)">
               <i class="el-icon-delete"></i>
               <span slot="title">删除</span>
             </el-menu-item>
@@ -80,7 +80,7 @@
       this.$store.dispatch("findProjects");
     },
     methods: {
-      ...mapActions(["filterProjects", "deleteProject"]),
+      ...mapActions(["filterProjects"]),
       openRenameModal(project) {
         this.dialogFormVisible = true;
         this.project = _.clone(project);
@@ -98,6 +98,21 @@
             })
             .catch(err => console.log(err));
         });
+      },
+      deleteProject(project) {
+        if (confirm(`确认删除项目${project.title}?`)) {
+          this.$store.dispatch("deleteProject", project.id).then(() => {
+            this.$message({
+              type: "success",
+              message: "删除成功!"
+            });
+          });
+        } else {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        }
       }
     }
   };

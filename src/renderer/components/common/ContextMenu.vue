@@ -17,6 +17,7 @@
     components: { Menu },
     mounted() {
       this.$refs["contextmenu"].oncontextmenu = e => {
+        e.stopPropagation()
         this.closePrev()
 
         menu = this.$refs["menu"];
@@ -24,6 +25,7 @@
       };
 
       document.addEventListener("click", this.closePrev);
+      document.addEventListener("contextmenu", this.closePrev);
       document.addEventListener("mousewheel", this.closePrev);
     },
     methods: {

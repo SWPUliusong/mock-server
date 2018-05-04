@@ -92,11 +92,12 @@ p {
   overflow-y: auto;
   /* 滚动条 */
   &::-webkit-scrollbar {
-    width: 8px;
+    // width: 8px;
+    width: 0;
   }
   /* 滚动条的滑轨背景颜色 */
   &::-webkit-scrollbar-track {
-    background-color: #707479; // -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #f2f5fa; // -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
     -webkit-border-radius: 4px;
     border-radius: 4px;
   }
@@ -104,7 +105,7 @@ p {
   &::-webkit-scrollbar-thumb {
     -webkit-border-radius: 4px;
     border-radius: 4px; // background-color: rgba(25, 25, 25, 0.1);
-    background-color: #1d1e1f;
+    background-color: #c5c9cc;
   }
   /* 滑轨两头的监听按钮颜色 */
   &::-webkit-scrollbar-button {
